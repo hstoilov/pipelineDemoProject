@@ -7,14 +7,14 @@ pipeline {
 	stages {
 		stage('Compile') {
                  steps {
-                     mvn :compile
+                    sh mvn compile
                  }
 		}
 		stage('UnitTest') {
                  steps {
-                     mvn resources: testResources
-					 mvn compiler: testCompile
-					 mvn surefire: test
+					sh 'mvn resources:testResources'
+					sh 'mvn compiler:testCompile'
+					sh 'mvn surefire:test'
                  }
 		}
 	}
