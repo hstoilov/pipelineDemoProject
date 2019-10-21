@@ -1,45 +1,21 @@
-pipeline {
-         agent any
-         stages {
-                 stage('One') {
+pipeline { 
+	agent any 
+	tools {
+		maven 'Maven 3.6' 
+		jdk 'JDK11' 
+	}
+	stages {
+		stage('Compile') {
                  steps {
-                     echo 'Hi, this is Zulaikha from edureka'
+                     mvn :compile
                  }
-                 }
-                 stage('Two') {
+		}
+		stage('UnitTest') {
                  steps {
-                    input('Do you want to proceed?')
+                     mvn resources: testResources
+					 mvn compiler: testCompile
+					 mvn surefire: test
                  }
-                 }
-                 stage('Three') {
-                 when {
-                       not {
-                            branch "master"
-                       }
-                 }
-                 steps {
-                       echo "Hello"
-                 }
-                 }
-                 stage('Four') {
-                 parallel { 
-                            stage('Unit Test') {
-                           steps {
-                                echo "Running the unit test..."
-                           }
-                           }
-                            stage('Integration test') {
-                              agent {
-                                    docker {
-                                            reuseNode true
-                                            image 'ubuntu'
-                                           }
-                                    }
-                              steps {
-                                echo "Running the integration test..."
-                              }
-                           }
-                           }
-                           }
-              }
+		}
+	}
 }
